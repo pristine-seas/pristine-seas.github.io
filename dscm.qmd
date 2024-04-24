@@ -1,0 +1,118 @@
+---
+title: "Deep sea cameras"
+number-sections: false
+date: today
+format: 
+  html:
+    self-contained: true
+    code-fold: true
+    toc: true
+    toc-location: right
+---
+
+```{r, message = F, warning = F, fig.width = 10, fig.height = 10, echo = F}
+options(scipen = 999)
+
+library(paletteer)
+library(sf)
+library(bigrquery)
+library(gt)
+library(highcharter)
+library(tidyverse)
+
+knitr::opts_chunk$set(eval = F, warning = F, message = F, include = F, echo = F)
+
+PristineSeasR::set_ps_paths(email = "marine.data.science@ngs.org")
+
+ps_data_path <- file.path(ps_science_path, "datasets/")
+
+bigrquery::bq_auth(email = "marine.data.science@ngs.org")
+
+bq_connection <- DBI::dbConnect(bigrquery::bigquery(), project = "pristine-seas")
+```
+
+```{r eval = T}
+all_dscm_deployments <- tbl(bq_connection, "deep_sea_cameras.deployments") |> 
+  filter(!is.na(ps_site_id)) |> 
+  collect()
+```
+
+# Map
+
+```{r map, eval = TRUE, include = T}
+tmp <- all_dscm_deployments |> 
+  filter(!is.na(deployment_lat)) |> 
+  st_as_sf(coords = c("deployment_lon", "deployment_lat"), crs = 4326) |> 
+  distinct(ps_expedition_id, ps_site_id, location, max_depth_m, mission_duration, geometry) 
+
+mapview::mapview(tmp,
+                 zcol = c(max_depth_m = "max_depth_m"), 
+                 legend = TRUE,
+                 map.types = c("Esri.WorldImagery"),
+                 layer.name = "Deployment depth (m)",
+                 col.regions = paletteer::paletteer_c("grDevices::Zissou 1", n = 10),
+                 popup = leafpop::popupTable(tmp,
+                                      zcol = c("ps_expedition_id",
+                                               "ps_site_id",
+                                               "location",
+                                               "max_depth_m",
+                                               "mission_duration")))
+```
+
+# Summary 
+
+```{r eval = T, include = T}
+totals <- all_dscm_deployments |> 
+  summarize(n_expeditions = n_distinct(ps_expedition_id),
+            n_deployments = n_distinct(ps_site_id),
+            min_depth = min(max_depth_m, na.rm = T),
+            mean_depth = mean(max_depth_m, na.rm = T),
+            max_depth = max(max_depth_m, na.rm = T)) |> 
+  mutate_if(is.numeric, round)
+```
+
+Since 2012, we have deployed a total of `r totals$n_deployments` deep sea cameras over the world's oceans.  
+
+```{r eval = T, include = T}
+all_dscm_deployments %>%
+  group_by(deployment_date) |> 
+  summarize(deployments = n()) |> 
+  ungroup() |> 
+  mutate(deployments = cumsum(deployments)) |> 
+  hchart("line", 
+         hcaes(x = deployment_date, y = deployments)) |> 
+  hc_title(text = "Deep sea camera deployments through time") |> 
+  hc_yAxis(title = list(text = "Number of deployments")) |> 
+  hc_xAxis(title = list(text = "")) 
+```
+
+## Depths 
+
+The deepest camera deployed so far landed at **`r totals$max_depth`** meters in the offshore region of Colombia known as Colinas y Lomas in the Pacific Ocean.
+
+```{r eval = TRUE, include = T}
+all_dscm_deployments |> 
+  filter(!is.na(max_depth_m)) |> 
+  pull(max_depth_m) |> 
+  hchart(name = "Max depth (m)")
+```
+
+```{r eval = TRUE, include = T}
+hcboxplot(
+  x = all_dscm_deployments$max_depth_m,
+  var = all_dscm_deployments$ps_expedition_id,
+  name = "Length",
+  color = "#2980b9",
+  outliers = TRUE) |> 
+  hc_chart(type = "column") |> 
+  hc_title(text = "Deployment depth by expedition") |> 
+  hc_yAxis(title = list(text = "Depth (meters)")) |> 
+  hc_add_series(data = all_dscm_deployments,
+                type = "scatter",
+                hcaes(x = "ps_expedition_id", y = "all_dscm_deployments$max_depth_m", 
+                      group = "ps_expedition_id"),
+                tooltip = list(pointFormat = "{point.location}<br>{point.ps_site_id}<br>{point.max_depth_m} meters")) |>  
+  hc_plotOptions(scatter = list(jitter = list(x = .1, y = 0),
+                                marker = list(radius = 3, opacity = 0.1, symbol = "circle",
+                                              lineWidth = 0.5)))
+```

@@ -15,6 +15,10 @@ website:
         text: Publications
       - href: index.qmd
         text: Meet the team
+      - text: "Posts"
+        menu: 
+          - text: "PS Dropcams"
+            href: dscm.qmd
 
 format:
   html:
@@ -23,4 +27,7 @@ format:
     toc: true
 
 editor: visual
+
+execute:
+  freeze: auto
 
