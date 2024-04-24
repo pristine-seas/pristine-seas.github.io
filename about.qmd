@@ -1,9 +1,5 @@
 ---
-title: "About"
+title: "How we work"
 ---
 
-About this site
-
-```{r}
-1 + 1
-```
+![Pristine Seas scientific methods](images/methods.png)

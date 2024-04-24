@@ -7,7 +7,14 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: about.qmd
+        text: Methods
+      - href: index.qmd
+        text: Expeditions
+      - href: index.qmd
+        text: Publications
+      - href: index.qmd
+        text: Meet the team
 
 format:
   html:

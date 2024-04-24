@@ -1,11 +1,7 @@
 ---
-title: "Pristine Seas Science"
+title: "Welcome to the scientific world of National Geographic Pristine Seas"
 ---
 
-This is a Quarto website.
+Here, you will (eventually) be able to learn more about the research we do, how we do it, the places we've explored, and the lessons we hace learned. In the meantime, this is just a placeholder :)
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-```{r}
-1 + 1
-```
+![](images/team_niue.png)
