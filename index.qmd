@@ -1,5 +1,5 @@
 ---
-title: "pristine-seas.github.io"
+title: "Pristine Seas Science"
 ---
 
 This is a Quarto website.
