@@ -35,9 +35,19 @@ bq_connection <- DBI::dbConnect(bigrquery::bigquery(), project = "pristine-seas"
 all_dscm_deployments <- tbl(bq_connection, "deep_sea_cameras.deployments") |> 
   filter(!is.na(ps_site_id)) |> 
   collect()
+
+totals <- all_dscm_deployments |> 
+  summarize(n_expeditions = n_distinct(ps_expedition_id),
+            n_deployments = n_distinct(ps_site_id),
+            min_depth = min(max_depth_m, na.rm = T),
+            mean_depth = mean(max_depth_m, na.rm = T),
+            max_depth = max(max_depth_m, na.rm = T)) |> 
+  mutate_if(is.numeric, round)
 ```
 
 # Map
+
+Since 2012, we have deployed a total of `r totals$n_deployments` deep sea cameras over the world's oceans.
 
 ```{r map, eval = TRUE, include = T}
 tmp <- all_dscm_deployments |> 
@@ -59,20 +69,6 @@ mapview::mapview(tmp,
                                                "mission_duration")))
 ```
 
-# Summary 
-
-```{r eval = T, include = T}
-totals <- all_dscm_deployments |> 
-  summarize(n_expeditions = n_distinct(ps_expedition_id),
-            n_deployments = n_distinct(ps_site_id),
-            min_depth = min(max_depth_m, na.rm = T),
-            mean_depth = mean(max_depth_m, na.rm = T),
-            max_depth = max(max_depth_m, na.rm = T)) |> 
-  mutate_if(is.numeric, round)
-```
-
-Since 2012, we have deployed a total of `r totals$n_deployments` deep sea cameras over the world's oceans.  
-
 ```{r eval = T, include = T}
 all_dscm_deployments %>%
   group_by(deployment_date) |> 
@@ -86,7 +82,7 @@ all_dscm_deployments %>%
   hc_xAxis(title = list(text = "")) 
 ```
 
-## Depths 
+## Depths
 
 The deepest camera deployed so far landed at **`r totals$max_depth`** meters in the offshore region of Colombia known as Colinas y Lomas in the Pacific Ocean.
 
@@ -98,21 +94,30 @@ all_dscm_deployments |>
 ```
 
 ```{r eval = TRUE, include = T}
-hcboxplot(
-  x = all_dscm_deployments$max_depth_m,
-  var = all_dscm_deployments$ps_expedition_id,
-  name = "Length",
-  color = "#2980b9",
-  outliers = TRUE) |> 
-  hc_chart(type = "column") |> 
+exp_info <- read_csv("data/expeditions.csv") |> 
+  janitor::clean_names()
+
+all_dscm_deployments <- all_dscm_deployments |> 
+  left_join(exp_info |> 
+              select(ps_expedition_id = expedition_id, expedition_name)) 
+
+
+dat <- data_to_boxplot(all_dscm_deployments, variable = max_depth_m, 
+                       group_var = expedition_name,
+                       add_outliers = F)
+
+highchart() %>%
+  hc_xAxis(type = "category") %>%
+  hc_add_series_list(dat) |> 
   hc_title(text = "Deployment depth by expedition") |> 
   hc_yAxis(title = list(text = "Depth (meters)")) |> 
   hc_add_series(data = all_dscm_deployments,
                 type = "scatter",
-                hcaes(x = "ps_expedition_id", y = "all_dscm_deployments$max_depth_m", 
-                      group = "ps_expedition_id"),
-                tooltip = list(pointFormat = "{point.location}<br>{point.ps_site_id}<br>{point.max_depth_m} meters")) |>  
+                hcaes(x = "expedition_name", 
+                      y = "all_dscm_deployments$max_depth_m", 
+                      group = "expedition_name"),
+                tooltip = list(pointFormat = "{point.location}<br>{point.ps_site_id}<br>{point.max_depth_m} meters")) |> 
   hc_plotOptions(scatter = list(jitter = list(x = .1, y = 0),
-                                marker = list(radius = 3, opacity = 0.1, symbol = "circle",
-                                              lineWidth = 0.5)))
+                                marker = list(radius = 3, opacity = 0.1,  lineWidth = 0.5))) |> 
+  hc_legend(NULL) 
 ```

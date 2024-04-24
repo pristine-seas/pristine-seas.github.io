@@ -1,0 +1,46 @@
+﻿Expedition #,Expedition ID,Expedition name,Country,Date
+1,NLI_2009,Northern Line Islands,United States,2007/08/12 - 2007/09/03
+2,SLI_2009,Southern Line Islands,Kiribati,2009/03/24 - 2009/04/28
+3,CRI_2009,Cocos Island,Costa Rica,2009/09/06 - 2009/09/25
+4,CHL_2010,Easter Island / Salas y Gómez,Chile,2010/02/18 - 2010/03/05
+5,PCN_2012,Pitcairn,United Kingdom,2012/03/11 - 2012/04/09
+6,GAB_2012,Gabon,Gabon,2012/10/06 - 2012/10/21
+7,CHL_2013,Nazca / Desventuradas,Chile,2013/02/02 - 2013/02/27
+8,RUS_2013,Franz Josef Land,Russia,2013/07/26 - 2013/09/03
+9,NCL_2013,New Caledonia,New Caledonia,2013/10/30 - 2013/11/23
+10,MOZ_2014,Southern Mozambique,Mozambique,2014/03/30 - 2014/04/25
+11,PLW_2014,Palau,Palau,2014/09/01 - 2014/09/30
+12,PYF_2014,Rapa Iti,French Polynesia,2014/10/15 - 2014/11/02
+13,SYC_2015,Seychelles Outer Islands,Seychelles,2015/03/09 - 2015/03/29
+14,CAN_2015,Last Ice Area,Canada/Denmark,2015/06/01 - 2015/08/01
+15,PRT_2015,Selvagens,Portugal,2015/09/02 - 2015/09/20
+16,ECU_2015,Galápagos Islands,Ecuador,2015/11/29 - 2015/12/24
+17,FRA_2016,Clipperton Atoll,France,2016/03/08 - 2016/03/25
+18,MEX_2016,Revillagigedo Islands,Mexico,2016/03/26 - 2016/04/18
+19,NIU_2016,Niue,Niue,2016/09/26 - 2016/10/10
+20,TRI_2017,Tristan Da Cunha,United Kingdom,2017/01/08 - 2017/02/12
+21,CHL_2017a,Cape Horn,Chile,2017/01/31 - 2017/02/13
+22,CHL_2017b,Juan Fernández Archipelago,Chile,2017/03/06 - 2017/03/20
+23,ASC_2017,Ascension,United Kingdom,2017/05/07 - 2017/06/13
+24,ARG_2018a,Yaganes - Isla de los Estados,Argentina,2018/02/12 - 2018/03/26
+25,ARG_2018b,Namuncurá - Banco Burdwood,Argentina,2018/02/12 - 2018/03/26
+26,COL_2018,Malpelo,Colombia,2018/04/23 - 2018/05/07
+27,MEX_2018,Islas Marías,Mexico,2018/05/01 - 2018/05/31
+28,PRT_2018,Azores,Portugal,2018/06/03 - 2018/06/23
+29,ANT_2019,Antarctic Peninsula,CCAMLR,2019/01/05 - 2019/01/23
+30,CRI_2019,Osa Peninsula,Costa Rica,2019/03/10 - 2019/03/30
+31,CHL_2020,Patagonian Fjords,Chile,2020/02/21 - 2020/03/08
+32,URY_2021,Talud Continental,Uruguay,2021/03/22 - 2021/03/31
+33,MEX_2021,Banco Chinchorro,Mexico,2021/06/01 - 2021/06/30
+34,SLI_2021,Southern Line Islands 2,Kiribati,2021/10/01 - 2021/10/21
+32,URY_2021b,Isla de Lobos,Uruguay,2021/12/01 - 2021/12/10
+35,COL_2022,Colombia,Colombia,2022/02/27 - 2022/04/21
+36,CAN_2022,Canadian Arctic,Canada,2022/07/11 - 2022/08/19
+37,DMA_2022,Dominica,Dominica,2022/11/16 - 2022/12/15
+38,MDV_2023,Maldives,Maldives,2023/02/25 - 2023/03/21
+39,SLI_2023,Southern Line Islands 3,Kiribati,2023/05/20 - 2025/06/06
+40,COK_2023,Tongareva,Cook Islands,2023/06/12 - 2023/07/03
+41,NIU_2023,Niue 2,Niue,2023/07/07 - 2023/07/31
+42,RMI_2023,Republic of the Marshall Islands,Marshall Islands,2023/08/29 - 2023/10/02
+43,FSM_2023,Federated States of Micronesia,Federated States of Micronesia,2023/10/01 - 2023/11/31
+44,PLW_2024,Palau 2,Palau,2024/02/01 - 2024/03/30
