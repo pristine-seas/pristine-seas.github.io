@@ -1,17 +1,31 @@
 [
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "How we work",
+    "objectID": "submersible.html",
+    "href": "submersible.html",
+    "title": "Submersible surveys",
     "section": "",
-    "text": "Pristine Seas scientific methods"
+    "text": "Since 2012, we have done a total of 119 surveys with the Deepsee manned submersible in the Pacific Ocean.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe deepest diver so far landed has been 400 meters at Flint in the Southern Line Islands of Kiribati,"
+  },
+  {
+    "objectID": "submersible.html#depths",
+    "href": "submersible.html#depths",
+    "title": "Submersible surveys",
+    "section": "",
+    "text": "The deepest diver so far landed has been 400 meters at Flint in the Southern Line Islands of Kiribati,"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to the scientific world of National Geographic Pristine Seas",
+    "section": "",
+    "text": "Here, you will (eventually) be able to learn more about the research we do, how we do it, the places we’ve explored, and the lessons we hace learned. In the meantime, this is just a placeholder :)"
   },
   {
     "objectID": "dscm.html",
     "href": "dscm.html",
     "title": "Deep sea cameras",
     "section": "",
-    "text": "Since 2012, we have deployed a total of 725 deep sea cameras over the world’s oceans.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe deepest camera deployed so far landed at 4111 meters in the offshore region of Colombia known as Colinas y Lomas in the Pacific Ocean."
+    "text": "Since 2012, we have deployed a total of 735 deep sea cameras over the world’s oceans.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe deepest camera deployed so far landed at 4111 meters in the offshore region of Colombia known as Colinas y Lomas in the Pacific Ocean."
   },
   {
     "objectID": "dscm.html#depths",
@@ -21,10 +35,10 @@
     "text": "The deepest camera deployed so far landed at 4111 meters in the offshore region of Colombia known as Colinas y Lomas in the Pacific Ocean."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Welcome to the scientific world of National Geographic Pristine Seas",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "How we work",
     "section": "",
-    "text": "Here, you will (eventually) be able to learn more about the research we do, how we do it, the places we’ve explored, and the lessons we hace learned. In the meantime, this is just a placeholder :)"
+    "text": "Pristine Seas scientific methods"
   }
 ]

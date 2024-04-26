@@ -17,8 +17,10 @@ website:
         text: Meet the team
       - text: "Posts"
         menu: 
-          - text: "PS Dropcams"
+          - text: "Dropcams"
             href: dscm.qmd
+          - text: "Submersible"
+            href: submersible.qmd
 
 format:
   html:

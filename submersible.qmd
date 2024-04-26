@@ -1,0 +1,128 @@
+---
+title: "Submersible surveys"
+number-sections: false
+date: today
+format: 
+  html:
+    self-contained: true
+    code-fold: true
+    toc: true
+    toc-location: right
+---
+
+```{r, message = F, warning = F, fig.width = 10, fig.height = 10, echo = F}
+options(scipen = 999)
+
+library(paletteer)
+library(sf)
+library(bigrquery)
+library(gt)
+library(highcharter)
+library(tidyverse)
+
+knitr::opts_chunk$set(eval = F, warning = F, message = F, include = F, echo = F)
+
+PristineSeasR::set_ps_paths(email = "marine.data.science@ngs.org")
+
+ps_data_path <- file.path(ps_science_path, "datasets/")
+
+bigrquery::bq_auth(email = "marine.data.science@ngs.org")
+
+bq_connection <- DBI::dbConnect(bigrquery::bigquery(), project = "pristine-seas")
+```
+
+```{r eval = T}
+all_dives <- tbl(bq_connection, "submersible.deepsee_dives") |> 
+  filter(!is.na(ps_site_id)) |> 
+  collect()
+
+totals <- all_dives |> 
+  summarize(n_expeditions = n_distinct(ps_expedition_id),
+            n_dives = n_distinct(ps_site_id),
+            min_depth = min(max_depth_m, na.rm = T),
+            mean_depth = mean(max_depth_m, na.rm = T),
+            max_depth = max(max_depth_m, na.rm = T)) |> 
+  mutate_if(is.numeric, round)
+```
+
+# Map
+
+Since 2012, we have done a total of `r totals$n_dives` surveys with the Deepsee manned submersible in the Pacific Ocean.
+
+```{r map, eval = TRUE, include = T}
+tmp <- all_dives |> 
+  filter(!is.na(surface_start_lon)) |> 
+  st_as_sf(coords = c("surface_start_lon", "surface_start_lat"), crs = 4326) |> 
+  distinct(ps_expedition_id, ps_site_id, location, max_depth_m, bottom_time, geometry) 
+
+mapview::mapview(tmp,
+                 zcol = c(max_depth_m = "max_depth_m"), 
+                 legend = TRUE,
+                 map.types = c("Esri.WorldImagery"),
+                 layer.name = "Dive depth (m)",
+                 col.regions = paletteer::paletteer_c("grDevices::Zissou 1", n = 10),
+                 popup = leafpop::popupTable(tmp,
+                                      zcol = c("ps_expedition_id",
+                                               "ps_site_id",
+                                               "location",
+                                               "max_depth_m",
+                                               "bottom_time")))
+```
+
+```{r eval = T, include = T}
+all_dives %>%
+  mutate(date = ymd(date)) |> 
+  group_by(date) |> 
+  summarize(dives = n()) |> 
+  ungroup() |> 
+  mutate(dives = cumsum(dives)) |> 
+  hchart("line", 
+         hcaes(x = date, y = dives)) |> 
+  hc_title(text = "Submersible dives through time") |> 
+  hc_yAxis(title = list(text = "Number of dives")) |> 
+  hc_xAxis(title = list(text = "")) 
+```
+
+## Depths
+
+The deepest diver so far landed has been `r totals$max_depth` meters at Flint in the Southern Line Islands of Kiribati,
+
+```{r eval = TRUE, include = T}
+all_dives |> 
+  filter(!is.na(max_depth_m)) |> 
+  pull(max_depth_m) |> 
+  hchart(name = "Max depth (m)")
+```
+
+```{r eval = TRUE, include = T}
+exp_info <- read_csv("data/expeditions.csv") |> 
+  janitor::clean_names()
+
+all_dives <- all_dives |> 
+  left_join(exp_info |> 
+              select(ps_expedition_id = expedition_id, expedition_name)) 
+
+dat <- data_to_boxplot(all_dives, variable = max_depth_m, 
+                       group_var = expedition_name,
+                       add_outliers = F)
+
+highchart() %>%
+  hc_xAxis(type = "category") %>%
+  hc_add_series_list(dat) |> 
+  hc_title(text = "Dive depth by expedition") |> 
+  hc_yAxis(title = list(text = "Depth (meters)")) |> 
+  hc_add_series(data = all_dives,
+                type = "scatter",
+                hcaes(x = "expedition_name", 
+                      y = "all_dives$max_depth_m", 
+                      group = "expedition_name"),
+                tooltip = list(pointFormat = "{point.location}<br>{point.ps_site_id}<br>{point.max_depth_m} meters")) |> 
+  hc_plotOptions(scatter = list(jitter = list(x = .1, y = 0),
+                                marker = list(radius = 3, opacity = 0.1,  lineWidth = 0.5))) |> 
+  hc_legend(NULL) 
+
+all_dives |> 
+  select(expedition_name, ps_site_id, location, dive_start_time, surface_start_lon, surface_start_lat,
+         bottom_time) |> 
+  write_csv("~/Desktop/pristine_seas_sub_dives.csv")
+```

@@ -120,4 +120,8 @@ highchart() %>%
   hc_plotOptions(scatter = list(jitter = list(x = .1, y = 0),
                                 marker = list(radius = 3, opacity = 0.1,  lineWidth = 0.5))) |> 
   hc_legend(NULL) 
+
+all_dscm_deployments |> 
+  select(expedition_name, ps_site_id, location, deployment_time_utc, deployment_lon, deployment_lat, max_depth_m, recording_time) |> 
+  write_csv("~/Desktop/pristine_seas_dscm_deployments.csv")
 ```
